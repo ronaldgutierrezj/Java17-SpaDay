@@ -1,19 +1,39 @@
 package org.launchcode.models;
 
+import jakarta.validation.constraints.*;
+//import jakarta.validation.constraints.Max;
+//import jakarta.validation.constraints.Min;
+//import jakarta.validation.constraints.NotBlank;
+
 public class User {
+
+    @NotEmpty
+    @Size(min = 5)
     private String username;
+
+    @Email
     private String email;
+
+    @NotEmpty
+    @Size(min = 6)
     private String password;
+
+    @NotNull(message = "Passwords do not match")
+    private String verifyPassword;
+
+
 
     public User() {
 
     }
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, String verifyPassword) {
         this();
         this.username = username;
         this.email = email;
         this.password = password;
+        this.verifyPassword = verifyPassword;
+
     }
 
     public String getUsername() {
@@ -38,6 +58,22 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+        checkPassword();
+    }
+
+    public String getVerifyPassword() {
+        return verifyPassword;
+    }
+
+    public void setVerifyPassword(String verifyPassword) {
+        this.verifyPassword = verifyPassword;
+        checkPassword();
+    }
+
+    private void checkPassword(){
+        if( password != null && verifyPassword != null && !password.equals(verifyPassword)){
+            setVerifyPassword(null);
+        }
     }
 }
 
